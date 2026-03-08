@@ -224,7 +224,7 @@ const ClientSettings: React.FC = () => {
             <InfoRow label="Started">{formatDate(sub?.started_at)}</InfoRow>
             <InfoRow label="Expires">{formatDate(sub?.ends_at)}</InfoRow>
             <div className="pt-4">
-              <button className="btn btn-primary" onClick={() => navigate('/client/subscription')}>
+              <button className="btn btn-primary" onClick={() => navigate('/client/my-subscription')}>
                 View Details
               </button>
             </div>
