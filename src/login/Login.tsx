@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Icon from "../components/Icon";
+import GreetoIcon from "../assets/GreetoIconWhite.svg";
 
 export default function Login() {
     const navigate = useNavigate();
