@@ -79,7 +79,7 @@ const App = () => {
           <Route path="tickets" element={<ComingSoon title="Support Tickets" description="View your support tickets" icon="support" />} />
           <Route path="active-logs" element={<ComingSoon title="Activity Logs" description="View system activity logs" icon="logs" />} />
           <Route path="user-feedback" element={<ComingSoon title="User Feedback" description="View user feedback" icon="feedback" />} />
-          <Route path="settings" element={<ComingSoon title="Settings" description="Manage your account settings and preferences" icon="settings" />} />
+          <Route path="settings" element={<ClientSettings />} />
           <Route path="api-management" element={<ComingSoon title="API Management" description="Manage your API keys and integration" icon="keys" />} />
           <Route path="integrations" element={<ComingSoon title="Integrations" description="Connect with third-party tools and services" icon="integrations" />} />
           <Route path="security" element={<ComingSoon title="Security" description="Manage security settings and access controls" icon="security" />} />
