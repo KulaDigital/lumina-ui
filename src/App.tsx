@@ -52,7 +52,7 @@ const App = () => {
           <Route path="chatbots" element={<ComingSoon title="Chatbots" description="Manage and configure your AI chatbots with advanced settings." icon="chatbot" />} />
           <Route path="subscriptions" element={<Subscriptions />} />
           <Route path="billing" element={<ComingSoon title="Billing & Revenue" description="Track billing information and revenue metrics." icon="billing" />} />
-          <Route path="usage" element={<ComingSoon title="Usage" description="Track usage statistics and resource consumption." icon="stats" />} />
+          <Route path="usage" element={<AdminUsage />} />
           <Route path="integrations" element={<ComingSoon title="Integrations" description="Connect with third-party tools and services to enhance functionality." icon="integrations" />} />
           <Route path="api-management" element={<ComingSoon title="API Management" description="Manage API keys, endpoints, rate limits, and monitor API usage." icon="keys" />} />
           <Route path="settings" element={<ComingSoon title="Settings" description="Configure system preferences and advanced options." icon="settings" />} />
