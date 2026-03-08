@@ -238,7 +238,7 @@ const Analytics: React.FC = () => {
           <div className="card-header">
             <h3 className="text-h3 text-[var(--color-text-primary)]">Conversation Trends (30 days)</h3>
           </div>
-          <div className="card-body" style={{ height: 300 }}>
+          <div className="card-body" style={{ minHeight: 400, height: 400 }}>
             {trendData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={trendData}>
