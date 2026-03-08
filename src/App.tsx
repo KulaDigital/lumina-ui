@@ -17,6 +17,7 @@ import TestChatbotPage from "./pages/clientPanel/TestChatbotPage";
 import Conversations from "./pages/clientPanel/Conversations";
 import WebScraper from "./pages/clientPanel/WebScraper";
 import Leads from "./pages/clientPanel/Leads";
+import ClientAnalytics from "./pages/clientPanel/Analytics";
 
 const App = () => {
   return (
