@@ -170,7 +170,7 @@ const ClientSettings: React.FC = () => {
           </div>
           <div className="card-body">
             <InfoRow label="User Name">{profile?.user_name || userRole?.userName || '—'}</InfoRow>
-            <InfoRow label="Phone Number">{profile?.phone || PLACEHOLDER}</InfoRow>
+            <InfoRow label="Phone Number">{profile?.phone_number || PLACEHOLDER}</InfoRow>
             <InfoRow label="Role">{capitalize(profile?.role || userRole?.role)}</InfoRow>
             <InfoRow label="Account Status">
               <span className="badge badge-success">Active</span>
