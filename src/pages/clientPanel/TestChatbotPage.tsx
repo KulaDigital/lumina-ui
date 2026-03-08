@@ -72,11 +72,7 @@ const TestChatbotPage: React.FC = () => {
     );
   }
 
-  return (
-    <TestChatbot 
-      apiKey={apiKey}
-    />
-  );
+  return <TestChatbot apiKey={apiKey} />;
 };
 
 export default TestChatbotPage;

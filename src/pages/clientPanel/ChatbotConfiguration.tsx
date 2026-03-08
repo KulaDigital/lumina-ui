@@ -344,7 +344,8 @@ const ChatbotConfiguration: React.FC = () => {
                         <p className="text-xs text-gray-700 mb-3">View our step-by-step integration guide to add the widget to your website.</p>
                         <button
                           onClick={() => setShowDocModal(true)}
-                          className="text-xs font-semibold text-white bg-primary px-3 py-1.5 rounded transition-all duration-200 hover:opacity-90"
+                          className="btn btn-primary"
+                          style={{ padding: '6px 12px', fontSize: 'var(--text-xs-size)' }}
                         >
                           View Integration Guide →
                         </button>
