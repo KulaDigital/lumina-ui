@@ -148,11 +148,12 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
             className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-xl px-5 py-4 rounded-lg ${
+              className={`max-w-xl px-5 py-4 rounded-[var(--radius-md)] ${
                 message.type === 'user'
-                  ? 'text-white bg-primary rounded-br-none'
+                  ? 'text-white rounded-br-none'
                   : 'bg-gray-200 text-gray-900 rounded-bl-none'
               }`}
+              style={message.type === 'user' ? { background: 'var(--color-primary)' } : undefined}
             >
               <p className="text-base whitespace-pre-wrap break-words">{message.content}</p>
               <p className={`text-xs mt-2 ${
