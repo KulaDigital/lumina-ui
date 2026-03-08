@@ -21,30 +21,26 @@ const Dashboard: React.FC = () => {
   return (
     <div>
       {/* Page Header */}
-      <div className="mb-6">
-        <h1>
-          Dashboard Overview
-        </h1>
-        <p className="text-text-secondary font-body">
-          Welcome back! Here's what's happening with your platform today.
-        </p>
+      <div className="page-header">
+        <h1>Dashboard Overview</h1>
+        <p>Welcome back! Here's what's happening with your platform today.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         {stats.map((stat, index) => (
           <StatCard key={index} {...stat} />
         ))}
       </div>
 
       {/* Recent Activity Card */}
-      <div className="bg-white border border-[var(--color-border)] rounded-lg overflow-hidden">
+      <div className="card">
         {/* Card Header */}
-        <div className="px-6 py-4 border-b border-[var(--color-border)] flex items-center justify-between">
-          <h3 className="text-xl font-bold text-text-primary font-heading">
+        <div className="card-header">
+          <h3 className="text-h3 text-[var(--color-text-primary)]">
             Recent Client Activity
           </h3>
-          <button className="px-4 py-2 text-sm font-medium text-text-secondary border border-[var(--color-border)] rounded-md hover:bg-bg-light transition-colors">
+          <button className="btn btn-outline text-sm">
             View All
           </button>
         </div>
@@ -53,39 +49,28 @@ const Dashboard: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-bg-light border-b border-[var(--color-border)]">
-                <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                  Client Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                  Action
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                  Plan
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                  Date
-                </th>
+              <tr className="bg-[var(--color-bg-light)] border-b border-[var(--color-border)]">
+                <th className="table-header-cell">Client Name</th>
+                <th className="table-header-cell">Action</th>
+                <th className="table-header-cell">Plan</th>
+                <th className="table-header-cell">Status</th>
+                <th className="table-header-cell">Date</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--color-border)]">
               {recentActivity.map((activity, index) => (
-                <tr key={index} className="hover:bg-bg-light transition-colors">
-                  <td className="px-6 py-4">
-                    <span className="font-semibold text-text-primary">{activity.client}</span>
+                <tr key={index} className="table-row">
+                  <td className="table-cell">
+                    <span className="font-semibold text-[var(--color-text-primary)]">{activity.client}</span>
                   </td>
-                  <td className="px-6 py-4 text-text-secondary">{activity.action}</td>
-                  <td className="px-6 py-4 text-text-secondary">{activity.plan}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${activity.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                      }`}>
+                  <td className="table-cell text-[var(--color-text-secondary)]">{activity.action}</td>
+                  <td className="table-cell text-[var(--color-text-secondary)]">{activity.plan}</td>
+                  <td className="table-cell">
+                    <span className={`badge ${activity.status === 'Active' ? 'badge-success' : 'badge-warning'}`}>
                       {activity.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-text-secondary text-sm">{activity.date}</td>
+                  <td className="table-cell text-[var(--color-text-secondary)] text-sm">{activity.date}</td>
                 </tr>
               ))}
             </tbody>

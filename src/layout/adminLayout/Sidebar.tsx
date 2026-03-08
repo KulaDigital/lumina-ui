@@ -3,10 +3,12 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import GreetoIcon from "../../assets/GreetoIconWhite.svg";
+import Icon from "../../components/Icon";
 
 interface MenuItem {
     label: string;
     path: string;
+    icon: string;
     badge?: string;
 }
 
@@ -19,31 +21,23 @@ const navSections: NavSection[] = [
     {
         title: "MAIN",
         items: [
-            { label: "Dashboard", path: "/SA/dashboard" },//has info for the admin about the clients users and all that stuff
-            { label: "Analytics", path: "/SA/analytics" },//analytics of all the users and clients
+            { label: "Dashboard", path: "/SA/dashboard", icon: "dashboard" },
+            { label: "Analytics", path: "/SA/analytics", icon: "analytics" },
         ],
     },
     {
         title: "MANAGE",
         items: [
-            { label: "Users", path: "/SA/users" },
-            { label: "Clients", path: "/SA/clients" },
-            { label: "Subscriptions", path: "/SA/subscriptions" },
-            { label: "Usage", path: "/SA/usage" },//each client's usage, how many messages used, how many leads got, how many conversations and all that stuff
+            { label: "Users", path: "/SA/users", icon: "users" },
+            { label: "Clients", path: "/SA/clients", icon: "chatbot" },
+            { label: "Subscriptions", path: "/SA/subscriptions", icon: "subscription" },
+            { label: "Usage", path: "/SA/usage", icon: "trending" },
         ],
     },
-    // {
-    //     title: "SUPPORT",
-    //     items: [
-    //         { label: "Tickets", path: "/SA/support" },
-    //         { label: "Active Logs", path: "/SA/active-logs" },
-    //         { label: "User Feedback", path: "/SA/user-feedback" },
-    //     ],
-    // },
     {
         title: "SYSTEM",
         items: [
-            { label: "Settings", path: "/SA/settings" },//system settings for the admin, like changing the theme, changing the colors, changing the font and all that stuff
+            { label: "Settings", path: "/SA/settings", icon: "settings" },
         ],
     },
 ];
@@ -56,11 +50,11 @@ const Sidebar: React.FC = () => {
     const isActive = (path: string) => location.pathname === path;
 
     return (
-        <div className="w-[280px] h-full bg-[var(--color-bg-dark)] fixed left-0 top-0 z-[100]">
+        <div className="w-[var(--sidebar-width)] h-full bg-[var(--color-bg-dark)] fixed left-0 top-0 z-[100] flex flex-col">
             {/* Logo Section */}
-            <div className="px-6 py-8 border-b border-white/10">
+            <div className="px-6 py-6 border-b border-white/10">
                 <div className="flex items-center gap-3 mb-1">
-                    <div className="w-10 h-10 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] rounded-lg flex items-center justify-center shadow-lg shadow-[var(--color-primary)]/20">
                         <img
                             src={GreetoIcon}
                             alt="Greeto"
@@ -68,25 +62,25 @@ const Sidebar: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <div className="text-xl font-extrabold text-white font-heading">
+                        <div className="text-xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
                             Greeto
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 ml-[52px]">
-                    <span className="text-xs text-[var(--color-text-light)] opacity-70 font-medium">Super Admin Panel</span>
-                    <span className="bg-[var(--color-primary)] text-white text-[9px] px-2 py-1 rounded-full font-bold uppercase tracking-wide">
+                    <span className="text-xs text-[var(--color-text-light)] opacity-60 font-medium">Super Admin</span>
+                    <span className="bg-[var(--color-primary)] text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
                         SUPER
                     </span>
                 </div>
             </div>
 
             {/* Navigation */}
-            <div className="h-[60%] overflow-y-auto py-6 scrollbar-thin scrollbar-thumb-white/10 ">
+            <div className="flex-1 overflow-y-auto py-5">
                 {navSections.map((section, idx) => (
-                    <div key={idx} className="mb-8">
+                    <div key={idx} className="mb-6">
                         {/* Section Title */}
-                        <div className="text-[11px] uppercase tracking-wider text-[var(--color-text-light)] opacity-50 font-bold px-6 mb-3">
+                        <div className="text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-light)] opacity-40 font-semibold px-6 mb-2">
                             {section.title}
                         </div>
 
@@ -96,20 +90,23 @@ const Sidebar: React.FC = () => {
                                 key={itemIdx}
                                 onClick={() => navigate(item.path)}
                                 className={`
-                                    flex items-center gap-3 px-6 py-3 text-[15px] font-medium cursor-pointer
-                                    transition-all duration-200 relative border-l-3 border-transparent
+                                    flex items-center gap-3 mx-3 px-3 py-2.5 text-[14px] font-medium cursor-pointer
+                                    transition-all duration-[var(--transition-fast)] rounded-lg mb-0.5
                                     ${isActive(item.path)
-                                        ? "bg-[var(--color-primary)] text-white font-semibold border-l-[var(--color-primary)]"
-                                        : "text-[var(--color-text-light)] hover:bg-[var(--color-primary)]/10 hover:text-white hover:border-l-[var(--color-primary)]"
+                                        ? "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/25"
+                                        : "text-[var(--color-text-light)]/70 hover:bg-white/5 hover:text-white"
                                     }
                                 `}
                             >
-                                {/* Label */}
+                                <Icon
+                                    name={item.icon}
+                                    size="sm"
+                                    decorative
+                                    className={isActive(item.path) ? "brightness-0 invert" : "opacity-60"}
+                                />
                                 <span className="flex-1">{item.label}</span>
-
-                                {/* Badge */}
                                 {item.badge && (
-                                    <span className="ml-auto bg-[var(--color-error)] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
+                                    <span className="bg-[var(--color-error)] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                                         {item.badge}
                                     </span>
                                 )}
@@ -120,14 +117,14 @@ const Sidebar: React.FC = () => {
             </div>
 
             {/* User Profile Footer */}
-            <div className="px-5 py-5 border-t border-white/10">
-                <div className="flex items-center gap-3 cursor-pointer">
-                    <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-base">
+            <div className="px-4 py-4 border-t border-white/10">
+                <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors duration-[var(--transition-fast)]">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] flex items-center justify-center text-white font-bold text-sm shadow-md">
                         {userRole?.userName?.charAt(0).toUpperCase() || 'U'}
                     </div>
-                    <div className="flex-1">
-                        <div className="font-semibold text-sm text-white">{userRole?.userName || 'User'}</div>
-                        <div className="text-xs text-[var(--color-text-light)] opacity-70">{userRole?.role === 'super_admin' ? 'Administrator' : 'Client User'}</div>
+                    <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-white truncate">{userRole?.userName || 'User'}</div>
+                        <div className="text-[11px] text-[var(--color-text-light)] opacity-50">{userRole?.role === 'super_admin' ? 'Administrator' : 'Client User'}</div>
                     </div>
                 </div>
             </div>
