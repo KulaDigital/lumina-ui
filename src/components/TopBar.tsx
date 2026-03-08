@@ -57,7 +57,9 @@ const TopBar: React.FC<TopBarProps> = ({ panelLabel, basePath, navItems }) => {
     <div className="px-8 py-4 bg-white flex items-center justify-between sticky top-0 z-[100] border-b border-[var(--color-border)]">
       {/* Left: Breadcrumbs */}
       <div className="flex items-center gap-2 text-sm">
-        <Icon name="home" size="sm" decorative className="opacity-50 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => navigate(basePath)} />
+        <span className="cursor-pointer hover:opacity-80 transition-opacity" onClick={() => navigate(basePath)}>
+          <Icon name="home" size="sm" decorative className="opacity-50" />
+        </span>
         <span
           className="text-[var(--color-text-secondary)] cursor-pointer hover:text-[var(--color-primary)] transition-colors"
           onClick={() => navigate(basePath)}
