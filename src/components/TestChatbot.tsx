@@ -123,7 +123,8 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
     <div className="flex flex-col w-full h-screen bg-white overflow-hidden">
       {/* Header */}
       <div 
-        className="text-white px-8 py-6 flex justify-between items-center border-b border-opacity-10 bg-secondary"
+        className="text-white px-8 py-6 flex justify-between items-center border-b border-opacity-10"
+        style={{ background: 'var(--color-secondary)' }}
       >
         <button
           onClick={() => navigate(-1)}
