@@ -292,7 +292,8 @@ const ChatbotConfiguration: React.FC = () => {
                 <div className="flex flex-col gap-3">
                   <button
                     onClick={() => setShowScriptModal(!showScriptModal)}
-                    className="w-full px-6 py-3 text-white bg-primary rounded-lg font-medium transition-all duration-200 hover:opacity-90"
+                    className="btn btn-primary w-full"
+                    style={{ padding: '12px 24px', fontSize: 'var(--text-body-size)' }}
                   >
                     {showScriptModal ? '↑ Hide Embed Script' : '↓ Show Embed Script'}
                   </button>
