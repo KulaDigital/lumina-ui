@@ -34,6 +34,8 @@ import bookIcon from '../assets/icons/book.svg';
 import infoIcon from '../assets/icons/info.svg';
 import bellIcon from '../assets/icons/bell.svg';
 import homeIcon from '../assets/icons/home.svg';
+import starIcon from '../assets/icons/star.svg';
+import liveIcon from '../assets/icons/live.svg';
 
 interface IconProps {
   name: string;
