@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { clientApi } from '../../api';
+import { authApi, clientApi } from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import Icon from '../../components/Icon';
 
-interface ClientProfile {
+interface MeData {
   role?: string;
   client_id?: number | string;
   user_name?: string;
-  phone?: string;
+  phone_number?: string;
+  subscription?: {
+    plan: string;
+    period: string;
+    status: string;
+    is_trial: boolean;
+    started_at: string;
+    ends_at: string;
+    is_entitled: boolean;
+  };
+  has_subscription?: boolean;
+}
+
+interface ClientMeData {
+  role?: string;
+  client_id?: number | string;
   company_name?: string;
   website_url?: string;
   subscription?: {
@@ -18,13 +33,27 @@ interface ClientProfile {
     is_trial: boolean;
     started_at: string;
     ends_at: string;
+    is_entitled: boolean;
   };
+  has_subscription?: boolean;
   widget?: {
     primary_color?: string;
     secondary_color?: string;
     position?: string;
     welcome_message?: string;
   };
+}
+
+interface CombinedProfile {
+  role?: string;
+  client_id?: number | string;
+  user_name?: string;
+  phone_number?: string;
+  company_name?: string;
+  website_url?: string;
+  subscription?: MeData['subscription'];
+  has_subscription?: boolean;
+  widget?: ClientMeData['widget'];
 }
 
 const PLACEHOLDER = 'Contact admin for details';
@@ -65,21 +94,37 @@ const ColorSwatch: React.FC<{ color?: string }> = ({ color }) => {
 const ClientSettings: React.FC = () => {
   const navigate = useNavigate();
   const { userRole } = useAuth();
-  const [profile, setProfile] = useState<ClientProfile | null>(null);
+  const [profile, setProfile] = useState<CombinedProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        const res = await clientApi.getClientProfile();
-        setProfile(res);
+        const [meRes, clientRes] = await Promise.all([
+          authApi.getMe(true).catch(() => null),
+          clientApi.getClientProfile().catch(() => null),
+        ]);
+
+        const combined: CombinedProfile = {
+          role: meRes?.role || clientRes?.role,
+          client_id: meRes?.client_id || clientRes?.client_id,
+          user_name: meRes?.user_name,
+          phone_number: meRes?.phone_number,
+          company_name: clientRes?.company_name,
+          website_url: clientRes?.website_url,
+          subscription: clientRes?.subscription || meRes?.subscription,
+          has_subscription: clientRes?.has_subscription ?? meRes?.has_subscription,
+          widget: clientRes?.widget,
+        };
+
+        setProfile(combined);
       } catch (err) {
         console.error('Error fetching profile:', err);
       } finally {
         setLoading(false);
       }
     };
-    fetch();
+    fetchData();
   }, []);
 
   if (loading) {
