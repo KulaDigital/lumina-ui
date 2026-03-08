@@ -371,7 +371,7 @@ const ChatbotConfiguration: React.FC = () => {
                 Reset
               </button>
               <button
-                onClick={() => navigate('/test-chatbot')}
+                onClick={() => navigate('/client/test-chatbot')}
                 className="px-6 py-3 text-white bg-secondary rounded-lg font-medium transition-all duration-200 hover:opacity-90"
               >
                 Test Chatbot

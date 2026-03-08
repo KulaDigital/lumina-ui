@@ -38,11 +38,11 @@ export const clientApi = {
   },
 
   /**
-   * Fetch all conversations for current client
-   * Used by: Conversations page
+   * Fetch conversations with optional filters
+   * Used by: Conversations page, ClientDashboard
    */
-  getConversations: async () => {
-    const response = await axiosInstance.get('/client/conversations');
+  getConversations: async (params?: { limit?: number; sort?: string; status?: string }) => {
+    const response = await axiosInstance.get('/client/conversations', { params });
     return response.data;
   },
 

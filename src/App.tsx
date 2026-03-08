@@ -17,6 +17,9 @@ import TestChatbotPage from "./pages/clientPanel/TestChatbotPage";
 import Conversations from "./pages/clientPanel/Conversations";
 import WebScraper from "./pages/clientPanel/WebScraper";
 import Leads from "./pages/clientPanel/Leads";
+import ClientAnalytics from "./pages/clientPanel/Analytics";
+import ClientSettings from "./pages/clientPanel/ClientSettings";
+import MySubscription from "./pages/clientPanel/MySubscription";
 
 const App = () => {
   return (
@@ -70,14 +73,15 @@ const App = () => {
           <Route path="chatbot" element={<ComingSoon title="My Chatbot" description="View and manage your AI chatbot" icon="chatbot" />} />
           <Route path="chatbot-config" element={<ChatbotConfiguration />} />
           <Route path="conversations" element={<Conversations />} />
-          <Route path="analytics" element={<ComingSoon title="Analytics" description="View your chatbot analytics and performance metrics" icon="stats" />} />
+          <Route path="analytics" element={<ClientAnalytics />} />
           <Route path="web-scraper" element={<WebScraper />} />
           <Route path="leads" element={<Leads />} />
           <Route path="test-chatbot" element={<TestChatbotPage />} />
           <Route path="tickets" element={<ComingSoon title="Support Tickets" description="View your support tickets" icon="support" />} />
           <Route path="active-logs" element={<ComingSoon title="Activity Logs" description="View system activity logs" icon="logs" />} />
           <Route path="user-feedback" element={<ComingSoon title="User Feedback" description="View user feedback" icon="feedback" />} />
-          <Route path="settings" element={<ComingSoon title="Settings" description="Manage your account settings and preferences" icon="settings" />} />
+          <Route path="settings" element={<ClientSettings />} />
+          <Route path="subscription" element={<MySubscription />} />
           <Route path="api-management" element={<ComingSoon title="API Management" description="Manage your API keys and integration" icon="keys" />} />
           <Route path="integrations" element={<ComingSoon title="Integrations" description="Connect with third-party tools and services" icon="integrations" />} />
           <Route path="security" element={<ComingSoon title="Security" description="Manage security settings and access controls" icon="security" />} />

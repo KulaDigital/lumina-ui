@@ -123,7 +123,8 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
     <div className="flex flex-col w-full h-screen bg-white overflow-hidden">
       {/* Header */}
       <div 
-        className="text-white px-8 py-6 flex justify-between items-center border-b border-opacity-10 bg-secondary"
+        className="text-white px-8 py-6 flex justify-between items-center border-b border-opacity-10"
+        style={{ background: 'var(--color-secondary)' }}
       >
         <button
           onClick={() => navigate(-1)}
@@ -147,11 +148,12 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
             className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-xl px-5 py-4 rounded-lg ${
+              className={`max-w-xl px-5 py-4 rounded-[var(--radius-md)] ${
                 message.type === 'user'
-                  ? 'text-white bg-primary rounded-br-none'
+                  ? 'text-white rounded-br-none'
                   : 'bg-gray-200 text-gray-900 rounded-bl-none'
               }`}
+              style={message.type === 'user' ? { background: 'var(--color-primary)' } : undefined}
             >
               <p className="text-base whitespace-pre-wrap break-words">{message.content}</p>
               <p className={`text-xs mt-2 ${
@@ -193,12 +195,14 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
             onKeyPress={handleKeyPress}
             disabled={loading}
             placeholder="Ask your question here..."
-            className="flex-1 px-4 py-3 border border-border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 border text-base focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            style={{ borderColor: 'var(--color-border)', borderRadius: 'var(--radius-md)', focusRingColor: 'var(--color-primary)' } as React.CSSProperties}
           />
           <button
             onClick={handleSendMessage}
             disabled={loading || !inputValue.trim()}
-            className="px-6 py-3 text-white bg-primary rounded-lg font-medium transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 text-white font-medium transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ background: 'var(--color-primary)', borderRadius: 'var(--radius-md)' }}
           >
             {loading ? (
               <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -94,7 +94,7 @@ const Sidebar: React.FC = () => {
                                     transition-all duration-[var(--transition-fast)] rounded-lg mb-0.5
                                     ${isActive(item.path)
                                         ? "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/25"
-                                        : "text-[var(--color-text-light)]/70 hover:bg-white/5 hover:text-white"
+                                        : "text-white/70 hover:bg-white/8 hover:text-white"
                                     }
                                 `}
                             >
