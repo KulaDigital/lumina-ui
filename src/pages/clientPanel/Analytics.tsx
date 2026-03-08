@@ -232,13 +232,13 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* B. Conversation Trends */}
         <div className="card">
           <div className="card-header">
             <h3 className="text-h3 text-[var(--color-text-primary)]">Conversation Trends (30 days)</h3>
           </div>
-          <div className="card-body" style={{ height: 300 }}>
+          <div className="card-body" style={{ minHeight: 400, height: 400 }}>
             {trendData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={trendData}>
@@ -269,16 +269,16 @@ const Analytics: React.FC = () => {
           <div className="card-header">
             <h3 className="text-h3 text-[var(--color-text-primary)]">Lead Status Breakdown</h3>
           </div>
-          <div className="card-body" style={{ height: 300 }}>
+          <div className="card-body" style={{ minHeight: 400, height: 400 }}>
             {leadStatusData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={leadStatusData}
                     cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
+                    cy="45%"
+                    innerRadius={55}
+                    outerRadius={95}
                     paddingAngle={3}
                     dataKey="value"
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
@@ -295,7 +295,11 @@ const Analytics: React.FC = () => {
                       fontSize: 13,
                     }}
                   />
-                  <Legend />
+                  <Legend
+                    verticalAlign="bottom"
+                    align="center"
+                    wrapperStyle={{ paddingTop: 16 }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             ) : (

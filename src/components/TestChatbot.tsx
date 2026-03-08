@@ -39,7 +39,6 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
-    // Add user message to chat
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -57,7 +56,6 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
         throw new Error('API key not found. Please refresh the page and try again.');
       }
 
-      // Make test API call
       const response = await axiosInstance.post('/search/test', {
         query: inputValue,
       }, {
@@ -66,18 +64,14 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
         },
       });
 
-      // Handle response
       let assistantReply = '';
       if (response.data.response) {
-        // Use the response field from the API
         assistantReply = response.data.response;
       } else if (response.data.results && response.data.results.length > 0) {
-        // Format the results as a response
         assistantReply = response.data.results
           .map((result: any) => result.text || result.content || result)
           .join('\n\n---\n\n');
       } else if (response.data.chunks && response.data.chunks.length > 0) {
-        // Fallback for chunks format
         assistantReply = response.data.chunks
           .map((chunk: any) => chunk.content || chunk.text || chunk)
           .join('\n\n');
@@ -98,8 +92,7 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to get response. Please try again.';
       setError(errorMessage);
-      
-      // Add error message to chat
+
       const errorAssistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
@@ -120,100 +113,149 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-white overflow-hidden">
-      {/* Header */}
-      <div 
-        className="text-white px-8 py-6 flex justify-between items-center border-b border-opacity-10"
-        style={{ background: 'var(--color-secondary)' }}
-      >
-        <button
-          onClick={() => navigate(-1)}
-          className="mr-4 text-white hover:opacity-75 transition-opacity p-2 hover:bg-white/10 rounded"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <div className="flex-1">
-          <h1 className="font-bold text-2xl">Test Your Chatbot</h1>
-          <p className="text-sm opacity-90 mt-1">Ask a question to preview how your widget responds</p>
+    <div className="flex flex-col gap-6 pb-20">
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="btn btn-outline"
+            style={{ padding: '8px' }}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div>
+            <h1>Test Your Chatbot</h1>
+            <p>Ask a question to preview how your widget responds</p>
+          </div>
         </div>
       </div>
 
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-4 bg-bg-light">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+      {/* Chat Card */}
+      <div className="card" style={{ minHeight: '500px', display: 'flex', flexDirection: 'column' }}>
+        {/* Chat Header */}
+        <div className="card-header">
+          <div className="flex items-center gap-2">
             <div
-              className={`max-w-xl px-5 py-4 rounded-[var(--radius-md)] ${
-                message.type === 'user'
-                  ? 'text-white rounded-br-none'
-                  : 'bg-gray-200 text-gray-900 rounded-bl-none'
-              }`}
-              style={message.type === 'user' ? { background: 'var(--color-primary)' } : undefined}
-            >
-              <p className="text-base whitespace-pre-wrap break-words">{message.content}</p>
-              <p className={`text-xs mt-2 ${
-                message.type === 'user' ? 'text-gray-200' : 'text-gray-600'
-              }`}>
-                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </p>
-            </div>
+              className="w-3 h-3 rounded-full"
+              style={{ background: 'var(--color-success)' }}
+            />
+            <span className="text-h3" style={{ color: 'var(--color-text-primary)' }}>
+              Chat Preview
+            </span>
           </div>
-        ))}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="bg-gray-200 text-gray-900 px-5 py-4 rounded-lg rounded-bl-none">
-              <div className="flex gap-2 items-center">
-                <div className="w-3 h-3 rounded-full bg-gray-600 animate-bounce" />
-                <div className="w-3 h-3 rounded-full bg-gray-600 animate-bounce" style={{ animationDelay: '0.1s' }} />
-                <div className="w-3 h-3 rounded-full bg-gray-600 animate-bounce" style={{ animationDelay: '0.2s' }} />
+          <span className="text-small" style={{ color: 'var(--color-text-secondary)' }}>
+            {messages.length - 1} messages
+          </span>
+        </div>
+
+        {/* Messages */}
+        <div
+          className="flex-1 overflow-y-auto"
+          style={{ padding: 'var(--space-lg)', background: 'var(--color-bg-light)' }}
+        >
+          <div className="flex flex-col gap-4 max-w-3xl mx-auto">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className="max-w-[75%] px-4 py-3"
+                  style={{
+                    borderRadius: message.type === 'user'
+                      ? 'var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-md)'
+                      : 'var(--radius-md) var(--radius-md) var(--radius-md) var(--radius-sm)',
+                    background: message.type === 'user' ? '#2563EB' : 'var(--color-bg-white)',
+                    color: message.type === 'user' ? '#FFFFFF' : 'var(--color-text-primary)',
+                    border: message.type === 'assistant' ? '1px solid var(--color-border)' : 'none',
+                    boxShadow: 'var(--shadow-sm)',
+                  }}
+                >
+                  <p style={{ fontSize: 'var(--text-body-size)', lineHeight: 'var(--text-body-line)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                    {message.content}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 'var(--text-xs-size)',
+                      marginTop: '6px',
+                      opacity: 0.7,
+                      color: message.type === 'user' ? '#FFFFFF' : 'var(--color-text-secondary)',
+                    }}
+                  >
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
               </div>
-            </div>
+            ))}
+            {loading && (
+              <div className="flex justify-start">
+                <div
+                  className="px-4 py-3"
+                  style={{
+                    background: 'var(--color-bg-white)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius-md) var(--radius-md) var(--radius-md) var(--radius-sm)',
+                    boxShadow: 'var(--shadow-sm)',
+                  }}
+                >
+                  <div className="flex gap-1.5 items-center">
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: 'var(--color-text-secondary)', animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: 'var(--color-text-secondary)', animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: 'var(--color-text-secondary)', animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <div style={{ padding: 'var(--space-sm) var(--space-lg)', background: 'rgba(239, 68, 68, 0.05)', borderTop: '1px solid var(--color-border)' }}>
+            <p className="text-small" style={{ color: 'var(--color-error)' }}>{error}</p>
           </div>
         )}
-        <div ref={messagesEndRef} />
-      </div>
 
-      {/* Error Message */}
-      {error && (
-        <div className="px-8 py-3 bg-red-50 border-t border-red-200">
-          <p className="text-sm text-red-700">{error}</p>
-        </div>
-      )}
-
-      {/* Input Area */}
-      <div className="border-t border-border px-8 py-6 bg-white">
-        <div className="flex gap-4 max-w-4xl">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            disabled={loading}
-            placeholder="Ask your question here..."
-            className="flex-1 px-4 py-3 border text-base focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{ borderColor: 'var(--color-border)', borderRadius: 'var(--radius-md)', focusRingColor: 'var(--color-primary)' } as React.CSSProperties}
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={loading || !inputValue.trim()}
-            className="px-6 py-3 text-white font-medium transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: 'var(--color-primary)', borderRadius: 'var(--radius-md)' }}
-          >
-            {loading ? (
-              <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M16.828 9.172a6 6 0 010 8.485m2.828-10.313a8 8 0 010 12.728M6.343 3.515a8 8 0 0110.314 10.314M3.515 6.343a6 6 0 018.485 8.485" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5.951-1.429 5.951 1.429a1 1 0 001.169-1.409l-7-14z" />
-              </svg>
-            )}
-          </button>
+        {/* Input */}
+        <div
+          style={{
+            padding: 'var(--space-md) var(--space-lg)',
+            borderTop: '1px solid var(--color-border)',
+            background: 'var(--color-bg-white)',
+          }}
+        >
+          <div className="flex gap-3 max-w-3xl mx-auto">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={loading}
+              placeholder="Ask your question here..."
+              className="input flex-1"
+              style={{ margin: 0 }}
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={loading || !inputValue.trim()}
+              className="btn btn-primary"
+              style={{ padding: '10px 20px' }}
+            >
+              {loading ? (
+                <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5.951-1.429 5.951 1.429a1 1 0 001.169-1.409l-7-14z" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

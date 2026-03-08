@@ -292,7 +292,8 @@ const ChatbotConfiguration: React.FC = () => {
                 <div className="flex flex-col gap-3">
                   <button
                     onClick={() => setShowScriptModal(!showScriptModal)}
-                    className="w-full px-6 py-3 text-white bg-primary rounded-lg font-medium transition-all duration-200 hover:opacity-90"
+                    className="btn btn-primary w-full"
+                    style={{ padding: '12px 24px', fontSize: 'var(--text-body-size)' }}
                   >
                     {showScriptModal ? '↑ Hide Embed Script' : '↓ Show Embed Script'}
                   </button>
@@ -343,7 +344,8 @@ const ChatbotConfiguration: React.FC = () => {
                         <p className="text-xs text-gray-700 mb-3">View our step-by-step integration guide to add the widget to your website.</p>
                         <button
                           onClick={() => setShowDocModal(true)}
-                          className="text-xs font-semibold text-white bg-primary px-3 py-1.5 rounded transition-all duration-200 hover:opacity-90"
+                          className="btn btn-primary"
+                          style={{ padding: '6px 12px', fontSize: 'var(--text-xs-size)' }}
                         >
                           View Integration Guide →
                         </button>
@@ -359,20 +361,23 @@ const ChatbotConfiguration: React.FC = () => {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex-1 px-6 py-3 text-white bg-primary rounded-lg font-medium transition-all duration-200 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-primary flex-1"
+                style={{ padding: '12px 24px', fontSize: 'var(--text-body-size)' }}
               >
                 {saving ? 'Saving...' : 'Save Configuration'}
               </button>
               <button
                 onClick={fetchClientData}
                 disabled={saving}
-                className="px-6 py-3 text-text-primary border border-[var(--color-border)] rounded-lg font-medium transition-all hover:bg-bg-light disabled:opacity-50"
+                className="btn btn-outline"
+                style={{ padding: '12px 24px', fontSize: 'var(--text-body-size)' }}
               >
                 Reset
               </button>
               <button
                 onClick={() => navigate('/client/test-chatbot')}
-                className="px-6 py-3 text-white bg-secondary rounded-lg font-medium transition-all duration-200 hover:opacity-90"
+                className="btn btn-secondary"
+                style={{ padding: '12px 24px', fontSize: 'var(--text-body-size)' }}
               >
                 Test Chatbot
               </button>
