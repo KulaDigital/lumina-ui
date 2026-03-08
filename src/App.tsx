@@ -46,7 +46,7 @@ const App = () => {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="analytics" element={<ComingSoon title="Analytics" description="Comprehensive analytics and insights dashboard to track performance metrics." icon="analytics" />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="users" element={<Users />} />
           <Route path="clients" element={<Clients />} />
           <Route path="chatbots" element={<ComingSoon title="Chatbots" description="Manage and configure your AI chatbots with advanced settings." icon="chatbot" />} />
