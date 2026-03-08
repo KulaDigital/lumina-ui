@@ -92,6 +92,8 @@ const iconMap: Record<string, string> = {
   info: infoIcon,
   bell: bellIcon,
   home: homeIcon,
+  star: starIcon,
+  live: liveIcon,
 };
 
 const sizeMap: Record<string, { width: number; height: number }> = {
