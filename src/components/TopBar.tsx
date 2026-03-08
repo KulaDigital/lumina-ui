@@ -110,11 +110,6 @@ const TopBar: React.FC<TopBarProps> = ({ panelLabel, basePath, navItems }) => {
           )}
         </div>
 
-        {/* Notification Bell */}
-        <div className="relative cursor-pointer p-2 hover:bg-[var(--color-bg-light)] rounded-lg transition-colors">
-          <Icon name="bell" size="sm" decorative className="opacity-60" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[var(--color-error)] rounded-full"></span>
-        </div>
       </div>
     </div>
   );
