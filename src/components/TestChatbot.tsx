@@ -195,12 +195,14 @@ const TestChatbot: React.FC<TestChatbotProps> = ({ apiKey }) => {
             onKeyPress={handleKeyPress}
             disabled={loading}
             placeholder="Ask your question here..."
-            className="flex-1 px-4 py-3 border border-border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 border text-base focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            style={{ borderColor: 'var(--color-border)', borderRadius: 'var(--radius-md)', focusRingColor: 'var(--color-primary)' } as React.CSSProperties}
           />
           <button
             onClick={handleSendMessage}
             disabled={loading || !inputValue.trim()}
-            className="px-6 py-3 text-white bg-primary rounded-lg font-medium transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 text-white font-medium transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ background: 'var(--color-primary)', borderRadius: 'var(--radius-md)' }}
           >
             {loading ? (
               <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
