@@ -71,7 +71,7 @@ const App = () => {
           <Route path="chatbot" element={<ComingSoon title="My Chatbot" description="View and manage your AI chatbot" icon="chatbot" />} />
           <Route path="chatbot-config" element={<ChatbotConfiguration />} />
           <Route path="conversations" element={<Conversations />} />
-          <Route path="analytics" element={<ComingSoon title="Analytics" description="View your chatbot analytics and performance metrics" icon="stats" />} />
+          <Route path="analytics" element={<ClientAnalytics />} />
           <Route path="web-scraper" element={<WebScraper />} />
           <Route path="leads" element={<Leads />} />
           <Route path="test-chatbot" element={<TestChatbotPage />} />
