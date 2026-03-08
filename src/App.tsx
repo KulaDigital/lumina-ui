@@ -55,7 +55,7 @@ const App = () => {
           <Route path="usage" element={<AdminUsage />} />
           <Route path="integrations" element={<ComingSoon title="Integrations" description="Connect with third-party tools and services to enhance functionality." icon="integrations" />} />
           <Route path="api-management" element={<ComingSoon title="API Management" description="Manage API keys, endpoints, rate limits, and monitor API usage." icon="keys" />} />
-          <Route path="settings" element={<ComingSoon title="Settings" description="Configure system preferences and advanced options." icon="settings" />} />
+          <Route path="settings" element={<AdminSettings />} />
           <Route path="security" element={<ComingSoon title="Activity Logs & Security" description="Monitor activity logs, security events, and manage access controls." icon="security" />} />
           <Route path="support" element={<ComingSoon title="Support Tickets" description="Manage customer support tickets and resolve issues efficiently." icon="support" />} />
           <Route path="active-logs" element={<ComingSoon title="Activity Logs" description="Monitor system activity, user actions, and event logs in real-time." icon="logs" />} />
