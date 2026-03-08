@@ -4,12 +4,11 @@ import { Outlet } from "react-router-dom";
 
 const AdminLayout: React.FC = () => {
     return (
-        <div className="min-h-full w-full bg-light">
+        <div className="min-h-full w-full" style={{ background: 'var(--color-bg-light)' }}>
             <Sidebar />
-
-            <div className="ml-[280px] min-h-screen flex flex-col">
+            <div className="ml-[var(--sidebar-width)] min-h-screen flex flex-col">
                 <TopBar />
-                <main className="bg-[var(--color-bg-light)] px-7 py-6 flex-1">
+                <main className="px-8 py-6 flex-1">
                     <div className="max-w-7xl mx-auto">
                         <Outlet />
                     </div>
