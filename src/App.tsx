@@ -9,6 +9,9 @@ import Dashboard from "./pages/adminPanel/Dashboard";
 import Clients from "./pages/adminPanel/Clients";
 import Users from "./pages/adminPanel/Users";
 import Subscriptions from "./pages/adminPanel/Subscription";
+import AdminAnalytics from "./pages/adminPanel/Analytics";
+import AdminUsage from "./pages/adminPanel/Usage";
+import AdminSettings from "./pages/adminPanel/Settings";
 import Login from "./login/Login";
 import NoAccess from "./pages/NoAccess";
 import ClientDashboard from "./pages/clientPanel/ClientDashboard";
@@ -43,16 +46,16 @@ const App = () => {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="analytics" element={<ComingSoon title="Analytics" description="Comprehensive analytics and insights dashboard to track performance metrics." icon="analytics" />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="users" element={<Users />} />
           <Route path="clients" element={<Clients />} />
           <Route path="chatbots" element={<ComingSoon title="Chatbots" description="Manage and configure your AI chatbots with advanced settings." icon="chatbot" />} />
           <Route path="subscriptions" element={<Subscriptions />} />
           <Route path="billing" element={<ComingSoon title="Billing & Revenue" description="Track billing information and revenue metrics." icon="billing" />} />
-          <Route path="usage" element={<ComingSoon title="Usage" description="Track usage statistics and resource consumption." icon="stats" />} />
+          <Route path="usage" element={<AdminUsage />} />
           <Route path="integrations" element={<ComingSoon title="Integrations" description="Connect with third-party tools and services to enhance functionality." icon="integrations" />} />
           <Route path="api-management" element={<ComingSoon title="API Management" description="Manage API keys, endpoints, rate limits, and monitor API usage." icon="keys" />} />
-          <Route path="settings" element={<ComingSoon title="Settings" description="Configure system preferences and advanced options." icon="settings" />} />
+          <Route path="settings" element={<AdminSettings />} />
           <Route path="security" element={<ComingSoon title="Activity Logs & Security" description="Monitor activity logs, security events, and manage access controls." icon="security" />} />
           <Route path="support" element={<ComingSoon title="Support Tickets" description="Manage customer support tickets and resolve issues efficiently." icon="support" />} />
           <Route path="active-logs" element={<ComingSoon title="Activity Logs" description="Monitor system activity, user actions, and event logs in real-time." icon="logs" />} />

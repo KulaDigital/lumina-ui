@@ -1,155 +1,174 @@
-// pages/Settings.tsx
-import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
-import type { SettingsState } from '../../types';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authApi, adminClientsApi, adminUsersApi } from '../../api';
+import Icon from '../../components/Icon';
+
+interface AdminProfile {
+  user_name?: string;
+  role?: string;
+  user_id?: string;
+  status?: string;
+}
+
+interface SystemInfo {
+  totalClients: number;
+  totalUsers: number;
+  activeSubscriptions: number;
+}
 
 const Settings: React.FC = () => {
-  const [settings, setSettings] = useState<SettingsState>({
-    platformName: 'Kula Chat AI',
-    supportEmail: 'support@kulachatai.com',
-    emailNotifications: true,
-    smsNotifications: false,
-    webhookUrl: '',
-    apiKey: 'sk-xxxxxxxxxxxxxxxx',
-  });
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<AdminProfile | null>(null);
+  const [systemInfo, setSystemInfo] = useState<SystemInfo>({ totalClients: 0, totalUsers: 0, activeSubscriptions: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setSettings(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+  useEffect(() => { fetchData(); }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [meRes, clientsRes, usersRes, subsRes] = await Promise.allSettled([
+        authApi.getMe(true),
+        adminClientsApi.getAllClients(),
+        adminUsersApi.getAllUsers(),
+        adminClientsApi.getClientsWithSubscriptions('active'),
+      ]);
+
+      if (meRes.status === 'fulfilled') {
+        setProfile({
+          user_name: meRes.value?.user_name || 'Admin',
+          role: meRes.value?.role || 'super_admin',
+          user_id: meRes.value?.user_id || meRes.value?.id || '—',
+          status: 'active',
+        });
+      }
+
+      const totalClients = clientsRes.status === 'fulfilled' ? (clientsRes.value?.count ?? 0) : 0;
+      const totalUsers = usersRes.status === 'fulfilled' ? (usersRes.value?.count ?? 0) : 0;
+      const subsClients = subsRes.status === 'fulfilled' ? (subsRes.value?.clients || []) : [];
+      const activeSubs = subsClients.filter((c: any) => c.subscription?.is_entitled).length;
+
+      setSystemInfo({ totalClients, totalUsers, activeSubscriptions: activeSubs });
+    } catch (err) {
+      console.error('Settings fetch error:', err);
+      setError('Failed to load settings data');
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const quickActions = [
+    { icon: 'users', label: 'View All Clients', path: '/SA/clients' },
+    { icon: 'people', label: 'View All Users', path: '/SA/users' },
+    { icon: 'logs', label: 'System Logs', path: '/SA/active-logs', placeholder: true },
+    { icon: 'storage', label: 'Backup Data', path: '#', placeholder: true },
+  ];
+
+  if (error && !loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <p className="text-[var(--color-error)]">{error}</p>
+        <button className="btn btn-primary" onClick={fetchData}>Retry</button>
+      </div>
+    );
+  }
+
+  const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
+    <div className="flex items-center justify-between py-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
+      <span className="text-small text-[var(--color-text-secondary)]">{label}</span>
+      <span className="text-small font-medium text-[var(--color-text-primary)]">{value}</span>
+    </div>
+  );
+
   return (
-    <div className="bg-bg-light min-h-screen">
-      <div className="mb-8">
+    <div className="flex flex-col gap-6 pb-20">
+      <div className="page-header">
         <h1>Settings</h1>
-        <p className="text-text-secondary font-body">Manage your platform settings and preferences</p>
+        <p>System settings and admin profile overview.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* General Settings */}
-        <div className="bg-white border border-[var(--color-border)] rounded-lg p-6">
-          <h3 className="text-xl font-bold text-text-primary mb-6 font-heading">General Settings</h3>
-          <div className="space-y-4">
+        {/* Admin Profile */}
+        <div className="card p-6">
+          <h3 className="text-h3 text-[var(--color-text-primary)] mb-4">Admin Profile</h3>
+          {loading ? (
+            <div className="space-y-3 animate-pulse">
+              {[1, 2, 3, 4].map(i => <div key={i} className="h-5 bg-[var(--color-bg-light)] rounded" />)}
+            </div>
+          ) : (
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">Platform Name</label>
-              <input
-                type="text"
-                name="platformName"
-                value={settings.platformName}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-[var(--color-border)] rounded-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">Support Email</label>
-              <input
-                type="email"
-                name="supportEmail"
-                value={settings.supportEmail}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-[var(--color-border)] rounded-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Notification Settings */}
-        <div className="bg-white border border-[var(--color-border)] rounded-lg p-6">
-          <h3 className="text-xl font-bold text-text-primary mb-6 font-heading">Notifications</h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-bg-light rounded-md">
-              <div>
-                <div className="font-medium text-text-primary">Email Notifications</div>
-                <div className="text-sm text-text-secondary">Receive email updates</div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="emailNotifications"
-                  checked={settings.emailNotifications}
-                  onChange={handleInputChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-bg-light rounded-md">
-              <div>
-                <div className="font-medium text-text-primary">SMS Notifications</div>
-                <div className="text-sm text-text-secondary">Receive text messages</div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="smsNotifications"
-                  checked={settings.smsNotifications}
-                  onChange={handleInputChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* API Settings */}
-        <div className="bg-white border border-[var(--color-border)] rounded-lg p-6">
-          <h3 className="text-xl font-bold text-text-primary mb-6 font-heading">API Configuration</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">API Key</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  name="apiKey"
-                  value={settings.apiKey}
-                  readOnly
-                  className="w-full px-4 py-2 border border-[var(--color-border)] rounded-md bg-bg-light text-text-secondary"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-medium text-primary hover:text-primary-hover">
-                  Copy
-                </button>
+              <InfoRow label="User Name" value={profile?.user_name || '—'} />
+              <InfoRow label="Role" value="Super Admin" />
+              <InfoRow label="User ID" value={profile?.user_id || '—'} />
+              <div className="flex items-center justify-between py-3">
+                <span className="text-small text-[var(--color-text-secondary)]">Status</span>
+                <span className="badge badge-success">Active</span>
               </div>
             </div>
+          )}
+        </div>
+
+        {/* System Information */}
+        <div className="card p-6">
+          <h3 className="text-h3 text-[var(--color-text-primary)] mb-4">System Information</h3>
+          {loading ? (
+            <div className="space-y-3 animate-pulse">
+              {[1, 2, 3, 4].map(i => <div key={i} className="h-5 bg-[var(--color-bg-light)] rounded" />)}
+            </div>
+          ) : (
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">Webhook URL</label>
-              <input
-                type="url"
-                name="webhookUrl"
-                value={settings.webhookUrl}
-                onChange={handleInputChange}
-                placeholder="https://your-domain.com/webhook"
-                className="w-full px-4 py-2 border border-[var(--color-border)] rounded-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
-              />
+              <InfoRow label="Total Clients" value={systemInfo.totalClients} />
+              <InfoRow label="Total Users" value={systemInfo.totalUsers} />
+              <InfoRow label="Active Subscriptions" value={systemInfo.activeSubscriptions} />
+              <div className="flex items-center justify-between py-3">
+                <span className="text-small text-[var(--color-text-secondary)]">System Status</span>
+                <span className="badge badge-success">Operational</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* API Configuration */}
+        <div className="card p-6">
+          <h3 className="text-h3 text-[var(--color-text-primary)] mb-4">API Configuration</h3>
+          <div>
+            <InfoRow label="AI Model" value="GPT-4O Mini" />
+            <InfoRow label="Embedding Model" value="text-embedding-3-small" />
+            <InfoRow label="Vector Dimensions" value="1536" />
+            <div className="mt-4 p-3 rounded-md" style={{ background: 'var(--color-primary-light)' }}>
+              <p className="text-xs text-[var(--color-text-secondary)]">
+                Contact the development team to modify API settings.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Security Settings */}
-        <div className="bg-white border border-[var(--color-border)] rounded-lg p-6">
-          <h3 className="text-xl font-bold text-text-primary mb-6 font-heading">Security</h3>
-          <div className="space-y-4">
-            <button className="w-full px-4 py-2 text-sm font-medium text-text-secondary border border-[var(--color-border)] rounded-md hover:bg-bg-light transition-colors text-left">
-              Change Password
-            </button>
-            <button className="w-full px-4 py-2 text-sm font-medium text-text-secondary border border-[var(--color-border)] rounded-md hover:bg-bg-light transition-colors text-left">
-              Enable Two-Factor Authentication
-            </button>
-            <button className="w-full px-4 py-2 text-sm font-medium text-status-error border border-status-error/20 rounded-md hover:bg-status-error/5 transition-colors text-left">
-              Delete Account
-            </button>
+        {/* Quick Actions */}
+        <div className="card p-6">
+          <h3 className="text-h3 text-[var(--color-text-primary)] mb-4">Quick Actions</h3>
+          <div className="space-y-3">
+            {quickActions.map((action, i) => (
+              <button
+                key={i}
+                onClick={() => !action.placeholder ? navigate(action.path) : undefined}
+                className={`w-full flex items-center gap-3 p-3 rounded-md text-left transition-colors ${
+                  action.placeholder
+                    ? 'opacity-50 cursor-not-allowed bg-[var(--color-bg-light)]'
+                    : 'hover:bg-[var(--color-bg-light)] cursor-pointer'
+                }`}
+                style={{ border: '1px solid var(--color-border)' }}
+              >
+                <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ background: 'var(--color-primary-light)' }}>
+                  <Icon name={action.icon} size="sm" decorative />
+                </div>
+                <span className="text-small font-medium text-[var(--color-text-primary)]">{action.label}</span>
+                {action.placeholder && <span className="ml-auto badge badge-warning text-xs">Coming Soon</span>}
+              </button>
+            ))}
           </div>
         </div>
-      </div>
-
-      <div className="mt-8 flex justify-end">
-        <button className="px-6 py-3 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-hover transition-colors">
-          Save Changes
-        </button>
       </div>
     </div>
   );
