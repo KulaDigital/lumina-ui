@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Icon from "../components/Icon";
+import GreetoIcon from "../assets/GreetoIconWhite.svg";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -46,8 +46,8 @@ export default function Login() {
                 {/* Logo Section */}
                 <div className="text-center mb-8">
                     <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] rounded-lg flex items-center justify-center">
-                            <Icon name="chat" size="lg" decorative className="text-white" />
+                        <div className="w-12 h-12 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] rounded-lg flex items-center justify-center shadow-lg shadow-[var(--color-primary)]/20">
+                            <img src={GreetoIcon} alt="Greeto" className="w-8 h-8 object-contain" />
                         </div>
                         <h1 className="text-3xl font-extrabold text-white font-heading">Greeto AI</h1>
                     </div>
